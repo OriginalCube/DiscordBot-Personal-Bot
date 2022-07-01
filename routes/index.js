@@ -77,6 +77,5 @@ client.on('messageCreate', async (res)=>{
 		+ '\n auto delete 10s').then((res)=>setTimeout(()=>res.delete(), 10000));
 	}
 });
-//OTkyMjI4MDkwODc5MTQ4MjE0.GNeFpl.Q6RuH3vpCnuW5skCALgo8NFwXjJh6q9cNhy21s
 client.login(process.env.DISCORD_TOKEN);
 
