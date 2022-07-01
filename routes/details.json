@@ -1,0 +1,11 @@
+{
+	"help" : {
+		"title" : "How to Register",
+		"description" : "You need to use command $account create <username> to create an account. Password will not be needed because it will be binded to your discord details",
+		"image" : "https://i.imgur.com/NBEIFBz.png"
+	},
+	"notes" : {
+	"help" :  "Use command $set note |Enter Title here| <> |Enter description here|.\n Sample : $set note This is a sample title <> This is a sample description.",
+	"image" : "https://thumbs.gfycat.com/ActualFrigidHen-size_restricted.gif" 
+	}
+}
