@@ -7,18 +7,17 @@ const dbURI = process.env.dbURI;
 const schema = require('./schema.js');
 const notificationSchema = require('./notificationSchema.js');
 
-client.on('ready', ()=>{
+client.on('ready', ()=>{//Checks if the bot works
 	console.log('Ready to use');
 });
 
 
-client.on('messageCreate', async (res)=>{
+client.on('messageCreate', async (res)=>{//Reads message sent and reads the value if command is used
 	const message = res.content; 	
 	if(message[0]!=='$'){return;}
 	const command = message.split(' ');
 	//Register Account help 
-	console.log(message);	
-	if(message==='$register help'){
+	if(message==='$register help'){//Sends commands for help '$register'
 		const fetchJson = jsonData.help;	
 		const embed = new MessageEmbed()
 			.setColor('#0099ff')
@@ -28,21 +27,21 @@ client.on('messageCreate', async (res)=>{
 		res.channel.send({embeds: [embed]});
 	}
 
-	await mongoose.connect(
+	await mongoose.connect(//Connect to DB
 		dbURI, {keepAlive : true}
 	);	
 
-	if(command[0]==='$account' && command[1] === 'create'){
+	if(command[0]==='$account' && command[1] === 'create'){//Create account and sends it to db. (username and userid)
 		if(command[2]!== null){
 			await new schema ({username: command[2], userid: res.author.id}).save();
 			res.author.send(`This is your account details: \n Username: ${command[2]} \n UserID: ${res.author.id}`)
-				.then((res) => {
+				.then((res) => {//asd
 					setTimeout(() => res.delete(),10000)
 				}).catch(console.error)//send and delete message when successfull
 		}
 	}
 
-	if(command[0]==='$account' && command[1]==='details'){
+	if(command[0]==='$account' && command[1]==='details'){//Reads data from db that has the accounts
 		schema.findOne({userid: res.author.id})
 			.then((response) => res.author.send(`Your username: ${response.username}` + 
 				`\nYour userID: ${response.userid}` + 
@@ -50,7 +49,7 @@ client.on('messageCreate', async (res)=>{
 				.then((res)=>{setTimeout(()=> res.delete(), 10000)}));
 	}
 
-	if(command[0]==='$set' && command[1]==='help'){
+	if(command[0]==='$set' && command[1]==='help'){//Sends help command for '$set'
 		fetchJson = jsonData.notes;	
 		const embed = new MessageEmbed()
 			.setColor('#0099ff')
@@ -76,6 +75,12 @@ client.on('messageCreate', async (res)=>{
 	  res.channel.send('Title of note:' + title + '\nDescription:' + description
 		+ '\n auto delete 10s').then((res)=>setTimeout(()=>res.delete(), 10000));
 	}
+
+	if(command[0]==='$set' && command[1]==='view'){
+ 			notificationSchema.find({userid: res.author.id})
+			.then((response) => response.map((info)=>res.author.send(`Title: ${info.title}\nDetails:${info.details}`))) 
+	}
+
 });
 client.login(process.env.DISCORD_TOKEN);
 
